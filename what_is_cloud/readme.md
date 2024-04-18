@@ -32,3 +32,41 @@ The main difference is that you manage and maintain the serves yourself with on-
 * Advantages: Scalability, flexibility, cost-effectiveness, reliability, and accessibility.<b>
 * Disadvantages: Security concerns, dependency on internet connectivity, potential downtime, and data privacy issues.
 
+### Difference between OpEx and CapEx.
+
+* *OpEx (Operational Expenditure):* Ongoing expenses for running a business (e.g., utility bills, salaries).
+* *CapEx (Capital Expenditure):* Upfront expenses for assets that provide long-term benefit (e.g., buying servers).
+
+##### How do OpEx and CapEx relate to the cloud?
+
+Cloud services are typically OpEx because you pay for what you use, rather than making large upfront investments in computing infrastructure and hardware.
+
+# Is migrating to the cloud always cheaper?
+
+In short no. But this is also dependent on a few factors. As while cloud services offer potential cost savings due to their pay-as-you-go model and scalability, factors like existing infrastructure, data transfer costs, and ongoing management can affect the overall cost.
+
+# Market share breakdown
+
+![img_3.png](img_3.png)
+
+This image shows the AWS for a long time as lead the competition in terms of market share in the cloud.
+
+# The three largest cloud providers and their USPs
+
+* *Amazon Web Services (AWS):* Known for its vast array of services, global infrastructure, and strong developer ecosystem.
+* *Microsoft Azure:* Strong integration with Microsoft products, hybrid cloud solutions, and comprehensive enterprise services.
+* *Google Cloud Platform (GCP):* Emphasizes data analytics, machine learning, and innovation, leveraging Google's expertise in these areas.
+
+# Which cloud provider might be the best and why?
+
+This question is heavily dependent on use case. But because of the sheer variety and amount of services, it might be AWS. You'd be hard pressed to find a need that isn't met by a service AWS provides.
+
+# What do you usually need to pay for when using the cloud?
+
+More often you'll be paying for computing resources (e.g., virtual machines), storage, data transfer, and additional services used, such as databases, analytics, and machine learning.
+
+# The four-pillars of DevOps and how they relate to cloud
+
+The four pillars of DevOps are *Culture*, *Automation*, *Measurement*, and *Sharing* (CAMS). 
+
+The cloud enables DevOps practices by providing scalable infrastructure, automation tools, metrics for monitoring and measuring performance, and collaboration platforms for sharing knowledge and code.
