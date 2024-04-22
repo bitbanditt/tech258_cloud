@@ -66,6 +66,19 @@
 
 ```ps -p $$``` prints information on a specific process (-p) in the example the shell ($$)
 
+```ps aux``` gives a snapshot of current processes
+
+```jobs -l``` lists processes
+
+```top``` lists all current processes with updates in a specific order
+* ```top -M``` lists process by which uses the most memory
+* ```top -N``` lists processes by newest first
+* ```top -P``` list by which takes up the most cpu
+
+```kill```ends a process at default level 
+
+
+
 
 
 clear
