@@ -19,16 +19,21 @@
 ```file``` outputs the details of a file
 
 
-```sudo``` gives the ability to execute a command with as a super user (highest permission). Some commands are only executable as a super user.
+```sudo``` gives the ability to execute a command with as a superuser (highest permission). Some commands are only executable as a superuser.
 
 * #### sudo variations 
 
+```sudo apt update -y``` this checks to make sure the system has the latest packages available. This is a safe command. The (-y) is to say yes to all questions asked by system.
+```sudo apt upgrade -y``` this installs the updated versions of the newly updated packages. This command can be dangerous as it can cause clashes as new packages may conflict.
 
+```sudo apt install``` intsalls a package when named. 
 
+```sudo su``` makes current user a super or root user. Use exit to quit. (Only be a root user if necessary)
+
+There are many sudo commands these are some of the most common. Two of the commands are used on boot up, with update is first and upgrade after. 
 
 
 ### Checks and information
-
 
 ```whoami``` tells you which user you are
 
@@ -44,7 +49,7 @@
 
 ```uname``` tells you the OS you are currently using
  
-* #### uname variations 
+* ##### uname variations 
 
 ```uname -p```  gives information on the processor
 
@@ -54,7 +59,7 @@
 
 ### Checks continued and information 
 
-```cat```  outputs all contents of a folder
+```cat```  outputs all contents of a folder or file
 
 ```cat /etc/shells``` given a folder path, all contents of that folder is outputted
 
@@ -75,35 +80,36 @@
 * ```top -N``` lists processes by newest first
 * ```top -P``` list by which takes up the most cpu
 
-```kill```ends a process at default level 
+```kill```sends a signal to kill a process at default signal level (15).  You must give the process id. -9 is a brute force kill  
 
+```kill -1``` lists all kill signals
 
+### More basic commands
 
+```clear``` clears the screen 
 
+```curl``` gives the ability to download from the internet 
 
-clear
+```mv ``` moves files or can be used to rename
 
-curl
-
-mv 
-
-cp 
+```cp``` copies files  
  
-rm cat
+```rm``` removes a file or directory giving its name
+
+```rm -r``` removes a directory and all the files within it 
+
+```rm -rf``` is to forcefully remove even if files or directory are write protected, and skips prompts. (This is a dangerous command) 
+
+```tree``` outputs directory information in a more visually clear manner. Must first be installed.
 
 
-rm -r stuff
-rm -rf funny
+```head -2``` prints the first two lines in text file (number of lines can be changed by change number after - ) eg. ```head -5 file.txt```
 
+```tail -2``` prints last two lines in text file
 
-head -2 chicken-joke.txt prints the first two lines in text file (number of lines can be changed by change number after - )
-tail -2 chicken-joke.txt prints last to lines in text file
-cat -n chicken-joke.txt
-grep "chicken" chicken-joke.txt
-sudo apt update -y 
-apt install tree
-apt upgrade
-tree 
+```grep``` does a search for a specified entry or pattern e.g ```grep "chicken" chicken-joke.txt```
+
+```sleep``` causes a delay giving a number 
 
 
 cd /
@@ -113,7 +119,7 @@ cd
 cd root
 sudo su
  
-nano provision.sh
+
 
    27  chmod +x provision.sh
 
