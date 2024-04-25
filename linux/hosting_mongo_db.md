@@ -1,12 +1,12 @@
 # Hosting a Mongo DB app 
 
-First set your EC2 instance, with the ssh security group and add security group with a custom tcp with port 27017 and allow connection from all 0.0.0.0. this is not best practice but is being done as we are just testing.
+First set your EC2 instance, with the ssh security group and add security group with a custom tcp with port 27017 (which mongodb runs on) and allow connection from all 0.0.0.0. this is not best practice but is being done as we are just testing.
 
 We do not add any HTTP access as we do not want anybody to be able to connect to the database. It is a security issue and we are just hosting.
 
 ### updating and upgrading
 
-When logging into our ubuntu virtual machine it is custom we update it and upgrade, though uprading is a command we wish to be careful about.
+When logging into our ubuntu virtual machine it is custom we update it and upgrade, though upgrading is a command we wish to be careful about.
 
 ```sudo apt update -y```
 
@@ -20,7 +20,8 @@ This step is used if the two commands aren't installed already. Even if they are
 
 * ####  Get public key for mongodb
 
-```curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+```
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
    sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
    --dearmor --yes
 ```
@@ -61,6 +62,7 @@ or automate via
 
 The sed command searches text file and replaces it with given text
 
+Necessary so that the mongo db database can be accessed from outside the local machine.
 
 ### restart mongo db (or start if not yet started) to update configuration
 

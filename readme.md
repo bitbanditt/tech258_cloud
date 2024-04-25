@@ -44,7 +44,7 @@ Now we are in the AMI that would be our username. Use the command ```sudo apt up
 
 ### Installing Nginx 
 
-The command ```sudo apt install nginx -y``` installs nginx. The process runs and when done use the command ```systemctl status nginx -y```  to launch and check health of the web server, press q to quit so you can keep navigating.
+The command ```sudo apt install nginx -y``` installs nginx. The process runs and when done use the command ```systemctl status nginx -y```  to launch and check health of the web server. Press q to quit so you can keep navigating.
 
 ### Seeing the web server
 
@@ -55,8 +55,6 @@ Now we are hosting a webserver via our EC2 instance. We can go to our EC2 page a
 So what did we just install? 
 * Nginx is an open source, high performance web server software used to serve web content, handle HTTP requests, and act as a reverse proxy and load balancer. Nginx has become popular for its efficiency, scalability, and low resource usage.
 
-# Deploy an app via nginx
 
-Follow the above steps to configure EC2 instance and when at the security groups, add an extra group of custom TCP and make the port 3000.
 
 

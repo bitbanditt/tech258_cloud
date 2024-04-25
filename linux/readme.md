@@ -80,7 +80,8 @@ There are many sudo commands these are some of the most common. Two of the comma
 * ```top -N``` lists processes by newest first
 * ```top -P``` list by which takes up the most cpu
 
-```kill```sends a signal to kill a process at default signal level (15).  You must give the process id. -9 is a brute force kill  
+```kill```sends a signal to kill a process at default signal level (15) which ends processes gracefully.  You must give the process id. -9 is a brute force kill.
+* ending a process gracefully tries to end child processes first
 
 ```kill -1``` lists all kill signals
 
