@@ -30,24 +30,38 @@ Azure is Microsoft's cloud computing platform. It  offers a variety of services 
 
 Azure is structured into various components:
 
-*Subscriptions:* A subscription is a billing and management container for Azure resources. It defines the billing and resource access scope for Azure services.
-*Resource Groups:* Resource groups are logical containers that hold related Azure resources for an application. They help you manage and organize resources in a more cohesive manner.
-*Resources:* These are individual services or components you deploy within Azure, such as virtual machines, databases, storage accounts, etc.
+* *Subscriptions:* A subscription is a billing and management container for Azure resources. It defines the billing and resource access scope for Azure services.
+* *Resource Groups:* Resource groups are logical containers that hold related Azure resources for an application. They help you manage and organize resources in a more cohesive manner.
+* *Resources:* These are individual services or components you deploy within Azure, such as virtual machines, databases, storage accounts, etc.
 
 ### Ways to Access Azure
 You can access Azure through various means:
 
-*Azure Portal:* A web-based management console for interacting with Azure resources.
-*Azure CLI:* Command-line interface for managing Azure resources.
-*Azure PowerShell:* PowerShell cmdlets for managing Azure resources.
-*Azure SDKs:* Software development kits for various programming languages.
-*REST API:* Azure provides a comprehensive set of REST APIs for programmatic access.
+* *Azure Portal:* A web-based management console for interacting with Azure resources.
+* *Azure CLI:* Command-line interface for managing Azure resources.
+* *Azure PowerShell:* PowerShell cmdlets for managing Azure resources.
+* *Azure SDKs:* Software development kits for various programming languages.
+* *REST API:* Azure provides a comprehensive set of REST APIs for programmatic access.
 
 ### Azure vs Azure DevOps
 
-*Azure:* Azure is a cloud computing platform that provides a wide range of cloud services, including computing, storage, networking, databases, AI, and more.
-*Azure DevOps:* Azure DevOps is a set of cloud-based collaboration tools for software development, including version control (Azure Repos), build and release management (Azure Pipelines), project management (Azure Boards), and testing (Azure Test Plans).
+* *Azure:* Azure is a cloud computing platform that provides a wide range of cloud services, including computing, storage, networking, databases, AI, and more.
+* *Azure DevOps:* Azure DevOps is a set of cloud-based collaboration tools for software development, including version control (Azure Repos), build and release management (Azure Pipelines), project management (Azure Boards), and testing (Azure Test Plans).
 
 ### Azure Pricing Calculator
 
-The Azure Pricing Calculator helps you estimate the cost of using Azure services based on your specific requirements. It allows you to select the services you plan to use, configure their settings, and estimate the monthly or yearly cost. This helps you plan and budget for your Azure deployments more effectively, avoiding unexpected expenses.
+The Azure Pricing Calculator helps you estimate the cost of using Azure services based on your specific requirements. 
+
+It allows you to select the services you plan to use, configure their settings, and estimate the monthly or yearly cost. This helps you plan and budget for your Azure deployments more effectively, avoiding unexpected expenses.
+
+### Azure scope levels
+
+![scope_levels.png](images/scope_levels.png)
+
+Scope levels refer to the different levels at which resources and policies can be applied and managed within the Azure environment. There are primarily four scope levels in Azure:
+
+* * *Management Group:* Highest level. Organizes multiple subscriptions, allowing for centralized governance controls.
+* * *Subscription:* Represents an agreement to use Azure services, where resources are deployed, and billing and access management are applied.
+* * *Resource Group:* Acts as a container for related resources, enabling unified management and applying policies.
+* * *Resource:* Represents individual services or components deployed within Azure, each with its own configuration and access controls.
+
