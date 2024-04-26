@@ -65,3 +65,9 @@ Scope levels refer to the different levels at which resources and policies can b
 * * *Resource Group:* Acts as a container for related resources, enabling unified management and applying policies.
 * * *Resource:* Represents individual services or components deployed within Azure, each with its own configuration and access controls.
 
+### Azure vs AWS
+
+* Static IPs are default on Azure, and not on AWS. Meaning when stopping and restarting an instance the IP address stays the same. 
+* * This is default on Azure not on AWS. So you have to manually make sure you free the IP when terminating instances on Azure as you are charged for IPs.
+* *Security group defaults:* By default Azure allows all internal traffic within VPC, AWS does not. You have to manually open these ports. 
+* To create a virtual machine, a VPC (virtual private network), Disk, NIC (network interface card) etc are needed. In Azure you can customise these, in AWS it is done for you.
