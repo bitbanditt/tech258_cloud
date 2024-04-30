@@ -4,21 +4,37 @@
 
 First is to log in to AWS and make sure you are in the correct region for where you'd like to use AWS services.
 
+![aws_region](images/aws_region.png)
+
 In your console will be a search bar or a services tab where you can choose the AWS services you'd like. Choose or search EC2.
+
+![find_ec2](images/find_ec2.png)
 
 ### Launching an EC2 instance
 
 Now you are in the EC2 console in orange will be the launch button. Press it to begin configuring your EC2 instance. 
 
+![launch_ec2](images/launch_ec2.png)
+
 You'll first be asked to name your instance. Give it a name that is descriptive of what service it is and what for, so it stands out to you if you have multiple services running.
+
+![naming_instance](images/naming_instance.png)
 
 Now you choose an AMI (Amazon Machine Image). An AMI is essentially a replicated model of a system or OS, that will contain usual packages it may include. This can also be configured. 
 
+![AWS_AMI](images/AWS_AMI.png)
+
 Next is choosing your instance type. There are many instance types to choose from, but to be efficient it is best to only use instances that have only the resources you need and nothing more.
 
-Following this is choosing the key pair login. This is how you will access your instance. It gives you access to the server via an ssh key stored in a .pem file. This is an encrypted private key created by Amazon. This is a file that must be kept secure, and thus kept in your .ssh folder. 
+![instance_type](images/instance_type.png)
 
-After securely keeping your .pem file in your .ssh folder, you will move on to Network Settings. This is where you configure your security groups, which is  an AWS version of a firewall for EC2. Here is where access to and from the instance is configured, which network traffic is allowed to flow in and out of the instance. 
+Following this is choosing the key pair login. This is how you will access your instance. It gives you access to the server via an ssh key stored in a .pem file. This is an encrypted private key created by Amazon. This is a file that must be kept secure, and thus kept in your .ssh folder. Once created you can choose the key pair in the dropdown for future instances. 
+
+![key_pair_login](images/key_pair_login.png)
+
+After securely keeping your .pem file in your .ssh folder, you will move on to Network Settings. This is where you configure your security groups, which is  an AWS version of a firewall for EC2. Here is where access to and from the instance is configured, which network traffic is allowed to flow in and out of the instance.
+
+![network_settings](images/network_settings.png)
 
 You have to make sure ssh access is ticked, so you can access your instance with the .pem file given. <b>
 You can then set up more security groups by pressing add security group rules. Use the tab and find and add HTTP, which allows internet access. You are able to choose which IP addresses can connect to the instance also. 
@@ -27,11 +43,15 @@ You can then set up more security groups by pressing add security group rules. U
 
 Storage choice is next, here you can choose how much storage the instance has. Again, it's best to only use an amount you need and nothing more.
 
+![storage](images/storage.png)
+
 To the right should be the summary of the instance you are creating. Scroll through and double check all is well. 
 
-After your checks press launch and now you have launched an EC2 instance!.
+![launch](images/launch.png)
 
-It will take a while to initialise. Once it is done you can press the link to go to the instance and see the details of it, check the status and much more. click the link of the instance
+After your checks press launch, and now you have launched an EC2 instance!.
+
+It will take a while to initialise. Once it is done you can press the link to go to the instance and see the details of it, check the status and much more, click the link of the instance
 
 # Hosting Nginx via EC2
 

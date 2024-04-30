@@ -140,12 +140,12 @@ printenv DB_HOST
 
 # get the app folder with the app code inside 
 echo getting app folder...
-git clone https://github.com/bitbanditt/tech258_test_app.git
+git clone https://github.com/bitbanditt/tech258_test_app.git repo
 echo done
 
 # cd into app folder
 echo going to app folder...
-cd ~/tech258_test_app/app
+cd repo/app
 echo inside app folder
 
 # install app
