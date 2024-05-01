@@ -58,7 +58,70 @@ Now we are fully confident in our User Data and AMI we can begin creating the sc
 
 ![VM_AZ](images/VM_AZ.png)
 
+* Next is Orchestration. We set it to uniform, this means all created vms will be identical in size and specifications. Security type is standard.
+* We then choose autoscaling, which scales out vms automatically based on a given CPU metric. We then configure scaling to set our parameters for scaling.
 
+![scaling_conf](images/scaling_conf.png)
+
+* We are taken to the scaling configuration page where we click the pencil on the right, so we can edit our scaling conditions.
+
+![scaling_conf2](images/scaling_conf2.png)
+
+* The condition name can remain the same. *Scale mode* is set to *auto*, so the scale can be automated. 
+* * *Initial instance count* is set to 2, so on launch 2 instances are made.
+* * *Instance limit minimum* is set to 2, so we will never have less than 2 instances at a given time.
+* * *Instance limit maximum* is set to 3, so we will not have more than 3 instances if autoscaling needs to occur.
+*  * *Scale out* is set to 75%, so when the average CPU threshold across all healthy instances is over the set amount, a vm will be launched.
+
+![scaling_condition](images/scaling_condition.png)
+
+* Next we set how many instances will be added when the threshold is reached. Which is 1. *Scale in* is set, so when average CPU threshold falls below a set number an instance is removed. *(Remember we will never have less than 2 as that is our minimum)*. We then choose how many instances to remove and how often our instances are checked, which is set to 10.
+
+![sc2](images/sc2.png)
+
+* Once complete, save or re-edit if necessary.
+
+![sc3](images/sc3.png)
+
+* We the make sure to choose our working and tested AMI. Select the correct size, set the right username and ssh key.
+
+![vmsc_AMI](images/vmsc_AMI.png)
+
+* Next we move on to select a standard disk (as we are just testing).
+
+![vmsc_disk](images/vmsc_disk.png)
+
+* We move on to network where we choose our virtual network, and use the pencil icon to set our NIC (Network Interface Card. Which allows us to access the internet).
+
+![vmsc_NIC](images/vmsc_NIC.png)
+
+* This takes us to the NIC editing page where NIC is named (we can leave as is), our subnet is chosen (as it is our app being launched we use our public subnet), and we create or choose an existing security group. 
+* * Make sure it ts the correct group if you chose an existing one. The rest is left as is.
+
+![vmsc_NIC2](images/vmsc_NIC2.png)
+
+* We then create our load balancer. Which redirects internet traffic to instances based on their health. 
+
+![vmsc_LB](images/vmsc_LB.png)
+
+* The panel opens on the right, and we can configure our load balancer, giving a clear name, type *(public as we want internet traffic going to the load balancer to be distributed among our vms)*, protocol *TCP which is the internet*, and we can set some rules further on
+
+![vmsc_LB2](images/vmsc_LB2.png)
+
+* We then set the ports for the load balancer. 80 is the internet, so it can receive traffic. Inbound NAT is where it sends traffic which are our instances. *Port range start* is our instances, 22 is the ssh. The ports are usually set this way by default, and we now click create.
+
+![vmsc_LB3](images/vmsc_LB3.png)
+
+* The health tab is next. We set our instance health to be monitored by selecting the enable box. The default configuration is fine, but we can check if we wish.
+* We enable the automatic repair policy and set the grace period in minutes. Here it is 10, which means an unhealthy instance is given 10 mins to become healthy, or it is replaced with a new healthy instance.
+
+![vmsc_health](images/vmsc_health.png)
+
+* User data is after. We paste our tested and working minimal script (the same used for our AMI) so our app is run. Do not alter it if it works, though there are some redundant steps they do not do hurt anything, whereas altering a working script can.
+
+![vmsc_userdata](images/vmsc_userdata.png)
+
+* Finally, we tag our resource, review and then create.
 
 ssh in - we are given private IP, have to use IP of load balancer, which is IP where we see app
 
