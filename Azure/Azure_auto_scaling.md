@@ -121,18 +121,67 @@ Now we are fully confident in our User Data and AMI we can begin creating the sc
 
 ![vmsc_userdata](images/vmsc_userdata.png)
 
-* Finally, we tag our resource, review and then create.
+* Finally, we tag our resource, review and then create. We must give our resources some time to deploy.
 
-ssh in - we are given private IP, have to use IP of load balancer, which is IP where we see app
+![vmsc_deploy](images/vmsc_deploy.png)
 
-create unhealthy instance stop one and start (app and user data doesn't re-run so instance will be unhealthy)
+* Then once deployed we can go to our resource.
 
-### Unhealthy
+![vmsc_deploy2](images/vmsc_deploy2.png)
 
-while 
+### Instance health
+
+While in our scale set resource we can see our instances and their health. They start as unhealthy when newly created, but give them some time and refresh and they should be ready
+
+![instance_health](images/inst_health.png)
+
+* * #### Accessing the app
+* Because we route outside traffic via the load balancer, if we want to see our app, we must use the public IP of our Load balancer. Our instances are giving private IPs, so they cannot be accessed from outside our network.
+
+
+* This also means to ssh in we have to use the public IP of our load balancer, and specify the port (instance) we want to go to using our ssh private key. We use the same command as usual but add ```-p``` and the port number: 
+```ssh -i ~/.ssh/tech258_nick_az_key -p 50000 adminuser@4.158.78.3```
+* * under the computer name column when in the scale set overview, the long number is our instance port number.
+
+### Instance health continued...
+
+By clicking on th box next to an instance, we are given some options on what to do with that instance. We particularly are interested in:
+* ```stop``` to stop the instance.
+* ```start``` to start the instance.
+* ```re-image``` to set the instance to its original state.
+* ```upgrade``` to set the instances with any modifications we made to the user data.
+
+![inst_options](images/inst_options.png)
+
+### Unhealthy instances
+
+To test the load balancer we can create an unhealthy instance by stopping and starting it.
+
+As user data is one run once, and doesn't re-run, the instance becomes unhealthy as the app is down. We get a 502 bad gateway while the load balancer adjusts & redirects traffic to the healthy instance.
+
+As we set the grace period to 10 minutes, the load balancer gives the instance that time to become healthy before deleting it and creating a new instance.
+
+![new_inst](images/new_inst.png)
+
+
 ### Clean up
 
-load balancer, new network security group, load balancer public IP, and scle set
+To avoid unnecessary charges we must clean up our scale set and all it's attached resources. We can open up each resource (scale set, load balancer, public IP) into separate browser tabs to make the process easier to follow.
 
-networking, load balancer, frontend IP
-delete scale group, then load balancer (as public IP is being used by it so must delete first before deleting public IP)
+* First is the scale set. We can use the panel on the left to reach the load balancer as highlighted.
+
+![ss_clean1](images/ss_clean1.png)
+
+* Second is the load balancer, as it is using the public IP, we must delete it first. As an IP in use cannot be deleted. We press the highlighted link to get to it, 
+* * and the front end IP link on the right to get to the public IP.
+
+![ss_clean2](images/ss_clean2.png)
+ 
+* Last is the public IP, accessed via the load balancer overview.
+
+![ss_clean3](images/ss_clean3.png)
+
+* Then we can delete it.
+
+![ss_clean4](images/ss_clean4.png)
+
