@@ -4,12 +4,15 @@
 
 * *High availability:* is the ability to have our instances hosting our app available to users with little to no downtime (as  much as possible).
 
-* *Scalability:* is the ability to produce more or less instances as is necessary. 
+* *Scalability:* is the ability to produce more or less instances as is necessary (scale out). 
 
 ### High availability and scalability using Azure virtual machine scale set
 
 
-*How is this achieved?* By using a vm scale set we are able to set up multiple virtual machines by default (known as "initial") and never have less than the initial set. This means that our app is always available as it is launched with multiple vms. 
+*How is this achieved?* By using a vm scale set we are able to set up multiple virtual machines by default (known as "initial"), and this is how many vms will be launched on creation. 
+* * This means that our app is always available as it is launched with multiple vms. 
+* * If we set our minimum instances below the initial we can have less than the amount we start with (instance min and max looked at later).
+
 
 * So, in case one goes down there is another available. And in response to a policy set e.g CPU Load we can add an extra vm. The scale set will take an average of CPU load of all healthy vms in use and if above the set threshold it will scale up (add a vm).
 
@@ -108,7 +111,7 @@ Now we are fully confident in our User Data and AMI we can begin creating the sc
 
 ![vmsc_LB2](images/vmsc_LB2.png)
 
-* We then set the ports for the load balancer. 80 is the internet, so it can receive traffic. Inbound NAT is where it sends traffic which are our instances. *Port range start* is our instances, 22 is the ssh. The ports are usually set this way by default, and we now click create.
+* We then set the ports for the load balancer. 80 is the port for unsecured internet traffic (HTTP), so it can receive traffic. Inbound NAT is where it sends traffic which are our instances. *Port range start* is our instances, 22 is the ssh port. The ports are usually set this way by default, and we now click create.
 
 ![vmsc_LB3](images/vmsc_LB3.png)
 
@@ -148,8 +151,8 @@ While in our scale set resource we can see our instances and their health. They 
 By clicking on th box next to an instance, we are given some options on what to do with that instance. We particularly are interested in:
 * ```stop``` to stop the instance.
 * ```start``` to start the instance.
-* ```re-image``` to set the instance to its original state.
-* ```upgrade``` to set the instances with any modifications we made to the user data.
+* ```re-image``` to set the instance to its original state, if we modify user data (doesn't use new user data, resets to old user data).
+* ```upgrade``` to set the instances with any modifications we made to the user data (uses new user data and relaunches instance).
 
 ![inst_options](images/inst_options.png)
 
