@@ -36,16 +36,257 @@ A *route* is a path traffic is allowed to take. Think of it like train tracks. T
 
 A *route table*  enforces the path/route traffic has to make. This can make sure, for example, the next place (next hop) traffic goes is the NVA, so it can be filtered, and sure its meant for the right destination.
 
-* nsg rules have priority lower 
+* nsg rules have priority 
 
+## Creating a Virtual Private Cloud (VPC)
+
+### Step 1: *Create a virtual network*
+
+* Search for Virtual Network and click.
+
+![VPC](images/VPC.png)
+
+* Press create
+
+![VPC_2](images/VPC_2.png)
+
+* Follow good naming conventions, so you can track the resource easier. As the Virtual Network will have 3 subnets we state it in the name.
+* Make sure you are in the correct region also
+
+![VPC_3](images/VPC_3.png)
+
+* We move on to IP addresses and create the desired subnets (a public, a DMZ, and a private), by pressing add a subnet. 
+
+![VPC_4](images/VPC_4.png)
+
+* Create the public subnet, name it, give it an IP starting address (10.0.2.0).
+
+![VPC_5](images/VPC_5.png)
+
+* Next we add the DMZ subnet.
+
+![VPC_6](images/VPC_6.png)
+
+* Then the private subnet. Pay special attention to clicking enable private subnet. This means vms in here it cannot access with the internet, making it private. 
+
+
+* This is important as it also means the vms in this subnet cannot access the internet to install mongodb, hence why making an image with the mongodb database already installed was important.
+
+![VPC_7](images/VPC_7.png)
+
+* We tag our resource, review it and then create.
+
+![VPC_8](images/VPC_8.png)
+
+### Step 2: *Create Database Virtual machine*
+
+We always create the database vm first. We can create the database virtual machine by looking for our created database image.
+
+* Search for images and click
+
+![VPC9](images/vpc9.png)
+
+* Find the link to your image and click
+
+![vpcx](images/vpcx.png)
+
+* Press create vm
+
+![vpcxi](images/vpcxi.png)
+
+* Complete the basic configurations, paying attention to naming conventions and hosting in Availability zone 3. 
+* Note the image is preselected. And region and security type are fixed.
+
+![vpcxii](images/vpcxii.png)
+
+* The disk is set to standard
+
+* Pay attention to pick the right virtual network, subnet (private) and set public IP to none (meaning our database cannot be accessed from outside the VPC). Choose the correct network security group or create a new one.
+
+![vpcxiii](images/vpcxiii.png)
+
+* We then tag our resource, review and create.
+
+### Step 3: Create App Virtual Machine
+
+Next we create the app instance (vm). This is so we can test our database and app are working together as intended.
+
+Keep in mind we need to alter our DB-HOST environment variable in our user data script to match the new private IP of the database.
+
+* Like earlier we use images to create our vm, this time making sure we use created app image.
+
+
+* As always follow naming convention, and we host this vm in Availability Zone 1. Again the image is pre-selected.
+
+![vpcx4](images/vpcx4.png)
+
+* We create our machine following the usual steps.
+* * We may however create a more secure network security group. 
+* * Also make sure to adapt the user data (under Advanced tab) to the new Private IP of the database.
+
+### Step 4: *Create Virtual Network Appliance VM*
+
+* We now create our VNA instance. We do not have an image for it, so we use the ubuntu 22.04 image. We place it in Availability Zone 2. Again follow naming conventions.
+
+![vpcx5](images/vpcx5.png)
+
+* Make sure the correct virtual network is selected, and the DMZ subnet also. We create or use an existing network security group allowing the SSH and HTTP ports.
+
+![vpcx6](images/vpcx6.png)
+
+### Step 5: *Check app and database can communicate*
+
+As we are in a VPC, Azure by default sets the network security group to allow all internal network traffic unless we restrict it. AWS restricts internal traffic by default
+
+To check packets (network traffic) can be sent between our app and database we ssh into our app instance and use the ```ping``` command and specify the destination the database private IP ```ping 10.0.4.4```. 
+
+![vpcx7](images/vpcx7.png)
+
+Packets will continually be sent to the database.
+
+![vpcx8](images/vpcx8.png)
+
+We can also check by using the apps public IP.
+
+### Step 6: *Set up User Router*
+
+User router restricts the path traffic is allowed to take inside the VPC. We set this route by creating a route table.
+
+* Start by searching route tables and click
+
+![vpcx9](images/vpcx9.png)
+
+* Then click create
+
+![vpcxx](images/vpcxx.png)
+
+* Check the region is correct. Name the route table correctly, by route, then rt at the end to make visible it is a route table.
+
+![vpcxx2](images/vpcxx2.png)
+
+* Tag the resource, review and then create.
+
+* Next we go to the resource
+
+![vpcxx3](images/vpcxx3.png)
+
+* Then on the left panel we go to settings and then routes, so we can set the routes.
+
+![vpcxx4](images/vpcxx4.png)
+
+* We click add
+
+![vpcxx5](images/vpcxx5.png)
+
+* We configure the route by specifying the route name, destination type which is IP addresses, the destination IP which is our private subnet (as traffic will be trying to reach our database inside the private subnet).
+
+
+* We then specify next hope type which is Virtual Appliance. Next hop address is the private IP of our VA instance as traffic must first flow through it to be filtered before going to the database (which is what we want).
+
+![vpcxx6](images/vpcxx6.png)
+
+* We can then see the added route
+
+![vpcxx7](images/vpcxx7.png)
+
+* We must then associate the route table with a subnet. In this case our public subnet as outside internet traffic flows through it. 
+
+
+* Click subnet on the left panel 
+
+![vpcxx8.2](images/vpcxx8_2.png)
+
+* Then click associate
+
+![vpcxx8](images/vpcxx8.png)
+
+* Choose the correct virtual network, and subnet (public), then ok.
+
+![vpcxx9](images/vpcxx9.png)
+
+### Step 7: *Set IP forwarding rules for NVA Virtual Machine*
+
+Now we have set the route, we need to set IP forwarding on Azure and then in the Network Virtual Appliance instance.
+
+* Go to the NVA virtual machine (you can search for vms in the search bar. A tip is to open each instance in a separate browser)
+* * On the left panel go to networking then network settings.
+
+![vpcxxx](images/vpcxxx.png)
+
+* Click the link for IP configurations.
+
+![vpcxxx2](images/vpcxxx2.png)
+
+* Enable IP forwarding then press apply
+
+![vpcxxx3](images/vpcxxx3.png)
+
+* SSH into your NVA virtual machine. As always on a new machine first run ```sudo apt update -y``` and ```sudo apt upgrade -y``` commands.
+
+* When this is done we can check if IP forwarding is active with the ```sysctl net.ipv4.ip_forward``` command. Note it says IP forward = 0
   
+![vpcxxx4](images/vpcxxx4.png)
+
+* We can enable IPv4 forwarding by changing the config files. We enter with ```sudo nano /etc/sysctl.conf``` 
+
+![vpcxxx5](images/vpcxxx5.png)
+
+* and scroll down to the line where it instructs us to uncomment the line to enable IPv4 forwarding.
+
+![vpcxxx6](images/vpcxxx6.png)
+
+* No changes will take effect, as when we make configuration modifications we need to the command ```sudo sysctl -p``` to make them take effect.
+
+Note it now says IP forward = 1
+
+![vpcxxx7](images/vpcxxx7.png)
+
+* If you check yor app instance note the pings have stopped. This is because the NVA doesn't know how to filter the traffic it is receiving, it just blocks it.
+
+* We have to create an IP table which sets out firewall rules for the NVA that rejects any traffic the doesn't meet it.This how traffic is filtered.
+
+* We create IP table rules as ascript and run the script. We must be careful with IP tables as the wrong rule executed at the wrong time can lock us out of the vm.
+
+* Create the script, give it execution permissions then run the script. The pings should continue shortly.
+
+![vpcxxx8](images/vpcxxx8.png)
 
 
-### IP forwarding
 
-IP tables rules
 
-### First steps
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
