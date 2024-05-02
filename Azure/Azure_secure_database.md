@@ -247,7 +247,7 @@ Note it now says IP forward = 1
 
 * We create IP table rules as ascript and run the script. We must be careful with IP tables as the wrong rule executed at the wrong time can lock us out of the vm.
 
-* Create the script, give it execution permissions then run the script. The pings should continue shortly.
+* Create the script, give it execution permissions ```chmod +x <file name>``` then run the script ```./<filename>``` . The pings should continue shortly.
 
 ![vpcxxx8](images/vpcxxx8.png)
 
