@@ -36,7 +36,11 @@ A *route* is a path traffic is allowed to take. Think of it like train tracks. T
 
 A *route table*  enforces the path/route traffic has to make. This can make sure, for example, the next place (next hop) traffic goes is the NVA, so it can be filtered, and sure its meant for the right destination.
 
-* nsg rules have priority 
+* nsg rules have priority . The higher the number the lower the priority. The lowest priority is given the highest number.
+
+### Recovery
+
+As you will soon see, we will be putting our virtual machines 3 separate Availability Zones. This is so if one AZ goes down, we still have portions of our architecture available and can recover easier, instead of starting from scratch.
 
 ## Creating a Virtual Private Cloud (VPC)
 
@@ -252,7 +256,11 @@ Note it now says IP forward = 1
 ![vpcxxx8](images/vpcxxx8.png)
 
 
+### Public IPs
 
+We remove the public ips from the database and the NVA eventually, means we cannot ssh in as we use public IP to do so (as ssh uses a port). means they can't be acessed. 
+
+We therefore need to access them internally (from inside our virtual network), ssh in to our app instance which has a public IP, then from that machine we get our private key (ssh key), so we can ssh into our database vm and change the bind IP in the config using SCP command. There are other ways to do this.  
 
 
 
