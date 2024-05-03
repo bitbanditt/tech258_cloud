@@ -49,7 +49,7 @@ Create an s3 bucket ```aws s3 mb s3://tech258-nick-first-bucket --region <region
 
 List an s3 bucket ```aws s3 ls s3://tech258-nick-first-bucket```
 
-```echo This is the first line in a test file > test.txt (create a file)```
+To easily create a file with having to use nano or a file editor ```echo This is the first line in a test file > test.txt (create a file)``` This prints (echo) the line give into (>) the file we created. We can check the contents of the file with ```cat test.txt ``` which prints the file contents to the terminal.
 
 ```aws s3 cp test.txt s3://tech258-nick-first-bucket``` (upload file to bucket) 
 
@@ -101,7 +101,9 @@ bucket_name = 'tech258-nick-test-boto3'
 # Create the bucket
 s3.create_bucket(Bucket=bucket_name)
 ```
-You may need to specify the region, as permission issues may occur as the default region you may not have permissions. 
+You may need to specify the region, as permission issues may occur as the default region you may not have permissions in. 
+
+Code amended with region specified:
 
 ```
 import boto3
@@ -124,6 +126,73 @@ bucket_name = 'tech258-nick-test-boto3'
 # Create the bucket
 s3.create_bucket(Bucket=bucket_name)
 ```
+
+To upload data/files to the S3 bucket:
+
+```
+import boto3
+
+# Create an S3 client
+s3 = boto3.client('s3')
+
+# Specify the bucket name and file to upload
+bucket_name = 'tech258-nick-test-boto3'
+file_name = 'path_to_file.txt'
+
+# Upload the file
+s3.upload_file(file_name, bucket_name, 'path_to_file.txt')
+```
+
+To download/retrieve content or files from the S3 bucket.
+
+```
+import boto3
+
+# Create an S3 client
+s3 = boto3.client('s3')
+
+# Specify the bucket name and file to download
+bucket_name = 'tech258-nick-test-boto3'
+file_name_in_bucket = 'desired_file_name_in_bucket.txt'
+
+# Specify where to save the downloaded file
+local_file_name = 'local_file.txt'
+
+# Download the file
+s3.download_file(bucket_name, file_name_in_bucket, local_file_name)
+```
+
+To delete content or files from the S3 bucket
+
+```
+import boto3
+
+# Create an S3 client
+s3 = boto3.client('s3')
+
+# Specify the bucket name and file to delete
+bucket_name = 'tech258-nick-test-boto3'
+file_name_in_bucket = 'desired_file_name_in_bucket.txt'
+
+# Delete the file
+s3.delete_object(Bucket=bucket_name, Key=file_name_in_bucket)
+```
+
+To delete the bucket
+
+```
+import boto3
+
+# Create an S3 client
+s3 = boto3.client('s3')
+
+# Specify the bucket name to delete
+bucket_name = 'tech258-nick-test-boto3'
+
+# Delete the bucket
+s3.delete_bucket(Bucket=bucket_name)
+```
+
 
 
 
