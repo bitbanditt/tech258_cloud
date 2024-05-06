@@ -16,10 +16,15 @@
 
 ```nano```  opens a blank file and lets you edit if a file name and type is given e.g ```nano script.sh```
 
-```file``` outputs the details of a file
+```cat``` outputs the details of a specified object
 
+```ping``` send packets (traffic) to a specified destination (IP)
+
+```traceroute``` shows the route of the packets/traffic
 
 ```sudo``` gives the ability to execute a command with as a superuser (highest permission). Some commands are only executable as a superuser.
+
+
 
 * #### sudo variations 
 

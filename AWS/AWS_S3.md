@@ -49,17 +49,27 @@ Create an s3 bucket ```aws s3 mb s3://tech258-nick-first-bucket --region <region
 
 List an s3 bucket ```aws s3 ls s3://tech258-nick-first-bucket```
 
-To easily create a file with having to use nano or a file editor ```echo This is the first line in a test file > test.txt (create a file)``` This prints (echo) the line give into (>) the file we created. We can check the contents of the file with ```cat test.txt ``` which prints the file contents to the terminal.
+To easily create a file with having to use nano or a file editor ```echo This is the first line in a test file > test.txt (create a file)``` This prints (echo) the line given into (>) the file we created. We can check the contents of the file with ```cat test.txt ``` which prints the file contents to the terminal.
 
-```aws s3 cp test.txt s3://tech258-nick-first-bucket``` (upload file to bucket) 
+The awscli command flow starts by calling aws and then the command and the sub command. We can get help on the available commands depending on the command e.g. 
 
-```aws s3 sync s3://tech258-nick-first-bucket .``` (download from bucket into current directory)
+* We can get aws commands with ```aws help```.
+* An aws command e.g. aws s3 ```aws <command> help```.
+* Or the sub command e.g. aws s3 rm ```aws <command> <subcommand> help```
 
-```aws s3 rm s3://tech258-nick-first-bucket/test.txt``` (remove file from cloud) 
+To upload a file to the bucket we use the ```aws s3``` subcommand ```cp``` and specify the file and bucket we want to upload the file to  ```aws s3 cp test.txt s3://tech258-nick-first-bucket```  
 
-```aws s3 rb s3://tech258-nick-first-bucket``` (rm bucket, but has to be empty)
+To download a file from a bucket to our present directory, we use the ```aws s3``` subcommand ```sync``` and specify the bucket and file we want, then ```.``` which signifies the directory we are currently in ```aws s3 sync s3://tech258-nick-first-bucket/test.txt .``` If we leave the file path blank the entire bucket will be downloaded.
 
-```aws s3 rb s3://tech258-nick-first-bucket --force``` (rm bucket and everything in it)
+* #### The next commands are dangerous especially the last
+
+To remove a file from the cloud we use the command ```rm``` subcommand ```aws s3 rm s3://tech258-nick-first-bucket/test.txt```  
+
+To remove a bucket we use the ```rb``` subcommand, however the bucket must be empty ```aws s3 rb s3://tech258-nick-first-bucket``` 
+
+To remove a bucket recursively (the bucket and all the contents and files within it) we use the command ```aws s3 rb s3://tech258-nick-first-bucket --force``` 
+
+Be careful using these commands as you do not get asked if you want to delete, it just executes the command.
 
 ### Implementing CRUD with Python Boto3
 
@@ -72,6 +82,8 @@ To use python boto3 in our scripts we must first import it in the script with ``
 We can use nano as our text editor, and we create our script by adding .py. ```nano list-bucket.py```. We enter the editor and can create our script.
 
 We execute the script by naming python3 then our script name ```python3 list-bucket.py```.
+
+Before writing our script we have to call boto3 ```import boto3```, this is like using python methods. We call the package so we can use the commands.
 
 The python script to list a bucket is:
 ```

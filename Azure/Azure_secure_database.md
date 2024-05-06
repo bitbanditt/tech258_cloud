@@ -38,9 +38,19 @@ A *route table*  enforces the path/route traffic has to make. This can make sure
 
 * nsg rules have priority . The higher the number the lower the priority. The lowest priority is given the highest number.
 
-### Recovery
+### Redundancy & Recovery
 
 As you will soon see, we will be putting our virtual machines 3 separate Availability Zones. This is so if one AZ goes down, we still have portions of our architecture available and can recover easier, instead of starting from scratch.
+
+Having multiple similar vms in different AZs is a form of redundancy. Another is having a disaster recovery plan. Having one allows us to get our applications back online quicker should something happen, as we have steps set in place to follow.
+
+We can also create back up plans, which are useful when using NVAs (Network Virtual Appliance). As they are a layer of security we should include some fault tolerance. For example:
+* * We can create multiple NVAs
+* * Even better, we can automate this by creating a scale set and use auto-scaling to have as many NVA vms we'd like and route the traffic through a load balancer, so it will manage the traffic going to the NVAs. 
+
+This is an example of making each part of our architecture resilient. There are various ways to tackle an issue and automate it, be creative.
+
+
 
 ## Creating a Virtual Private Cloud (VPC)
 
@@ -194,6 +204,7 @@ User router restricts the path traffic is allowed to take inside the VPC. We set
 ![vpcxx7](images/vpcxx7.png)
 
 * We must then associate the route table with a subnet. In this case our public subnet as outside internet traffic flows through it. 
+* It is important that the source of traffic (in this case the public subnet) is associated to a route table. This is so the incoming traffic is guided as we would like. 
 
 
 * Click subnet on the left panel 
@@ -258,9 +269,42 @@ Note it now says IP forward = 1
 
 ### Public IPs
 
-We remove the public ips from the database and the NVA eventually, means we cannot ssh in as we use public IP to do so (as ssh uses a port). means they can't be acessed. 
+We remove the public IPs from the database initially and the NVA eventually (so it also cannot be accessed from outside our virtual network/VPC). This means we cannot ssh in as we use the public IP to do so (as ssh uses a port). This means they can't be accessed even by us who created them. 
 
-We therefore need to access them internally (from inside our virtual network), ssh in to our app instance which has a public IP, then from that machine we get our private key (ssh key), so we can ssh into our database vm and change the bind IP in the config using SCP command. There are other ways to do this.  
+We therefore need to access them internally (from inside our virtual network).
+
+We SSH into our app instance which has a public IP. Then from that machine we get our private key (ssh key), so we can ssh into our database vm and change the bind IP in the config. By using SCP command we can get our private key from our local machine into our instance/vm. There are other ways to do this.  
+
+### Network Security Groups
+
+We can increase security by using stricter rules in our Network Security Groups (NSGs). This is accomplished by denying traffic and access to ports. For example: We give access to the ports we want to allow traffic to access, and then deny access to the rest.
+
+NSG rules are executed by priority. Lower numbers have higher priority and higher numbers have less priority. This means we need to give the correct priority to the rules we want executed. For example:
+
+
+* * At some point we want to deny access to all ports so our architecture is more secure. However, there are some ports we want to allow access to so our app is usable. Therefore, we would make sure access to the ports we want open are given higher priority by giving them a lower number, so they are executed first. 
+* * This means the rule to deny access to all ports will be given a higher number, so it has lower priority and is executed after opening the ports we want. Or else it will be executed first and the ports we want open will not be allowed to be opened. 
+
+* #### Azure vs AWS security groups
+
+* * * By default, Azure allows all traffic within a virtual network (VPC). This means on onset we do not need to specify the ports we would like open, and all components/subnets within our virtual network (VPC) can communicate e.g. our database, app and VNA. If we want a port closed we have to go and specify them.  
+It is assumed to be like this as if we create the virtual networks we are the ones creating the components in them and would want them to communicate.
+* * * In contrast, AWS makes the VPC private by default. This means it does not allow traffic within the virtual network and the components/subnets within it are not able to communicate. This means we have to specify the ports we want to use when we create our instances, as all ports are closed. It is assumed it is like this for security purposed.
+ 
+
+### IP forwarding and IP tables
+
+IP forwarding is the practice of directing network traffic (internet, intranet etc.) to the destination we would like it to go. It is like writing a letter, we put an address on it so the postal service knows where to deliver it to. This is what we can use a VNA instance to do. This is done by setting up an IP table.
+
+If we enable IP forwarding (first on the cloud provider site, then in the virtual machine), without setting up an IP table, the VNA does not know where to send the traffic it receives or how to filter it.
+
+This is what an IP table is for. We can set rules for what to do with different types of network traffic and requests, determining what should be taken as safe network traffic. In essence controlling what type of traffic/data is allowed to enter or leave our system. Only allowing safe traffic and rejecting malicious traffic. Thus making it a firewall. 
+
+(A firewall blocks or allows network traffic based on a set of rules we can set.)
+
+
+
+
 
 
 
