@@ -1,5 +1,8 @@
 # Auto scaling
 
+![high_A_high_S](images/high_A_high_S.png)
+
+
 ### What is high availability and scalability
 
 * *High availability:* is the ability to have our instances hosting our app available to users with little to no downtime (as  much as possible).
