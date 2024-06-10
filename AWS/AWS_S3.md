@@ -128,7 +128,6 @@ s3 = boto3.client('s3', region_name=region_name)
 
 # Now you can perform S3 operations using the 's3' client
 
-
 # Create an S3 client
 s3 = boto3.client('s3')
 
@@ -137,6 +136,13 @@ bucket_name = 'tech258-nick-test-boto3'
 
 # Create the bucket
 s3.create_bucket(Bucket=bucket_name)
+```
+or
+
+```
+# Specify the region where the bucket will be 
+createdregion = 'eu-west-1'
+# Create S3 bucket with the specified regions3.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': region})
 ```
 
 To upload data/files to the S3 bucket:
@@ -190,7 +196,7 @@ file_name_in_bucket = 'desired_file_name_in_bucket.txt'
 s3.delete_object(Bucket=bucket_name, Key=file_name_in_bucket)
 ```
 
-To delete the bucket
+To delete the bucket (bucket must be empty)
 
 ```
 import boto3
@@ -205,7 +211,20 @@ bucket_name = 'tech258-nick-test-boto3'
 s3.delete_bucket(Bucket=bucket_name)
 ```
 
+To force delete (recursively), which will delete the bucket and everything in it, we can use a for loop in the script
 
+```
+import boto3
+
+s3 = boto3.resource('s3')
+
+bucket_name = 'tech258-nick-test-boto3'
+
+bucket = s3.Bucket(bucket_name)
+for key in bucket.objects.all():
+    key.delete()
+bucket.delete()
+```
 
 
 

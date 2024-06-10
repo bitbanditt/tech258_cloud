@@ -1,14 +1,14 @@
 # Cloud computing and the Cloud
 
-![img.png](img.png)
+![CC](CC.png)
 
 ### What is cloud computing?
 
-Cloud computing is using the internet to borrow or rent computing resources over the internet from those who have large amounts. This makes it so you don't have to have these resources you can use theirs. 
+Cloud computing is using the internet to borrow or rent computing from those who have large amounts. This makes it so you don't have to have these resources you can use theirs. 
 
 ### How do we know if it's in the cloud? 
 
-![img_2.png](img_2.png)
+![CC2](img_2.png)
 
 If it is not on your/the users physical servers (on prem), but stored or processed on a cloud service providers servers such as Google or Amazon, then we know it is on the cloud. 
 

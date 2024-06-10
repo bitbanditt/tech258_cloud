@@ -1,8 +1,10 @@
 # Securing database with Azure
 
+![priv_vpc](images/priv_vpc.png)
+
 ### Making database truly private
 
-Hosting our database in an instance in our private subnet, does not make it secure. Even though we have network security groups (nsg) specifying the allowed ports, it still has a public IP and can be accessed (We don't want a way for our database to be accessed from the outside).
+Hosting our database on an instance in our private subnet does not make it secure. Even though we have network security groups (nsg) specifying the allowed ports, it still has a public IP and can be accessed (We don't want a way for our database to be accessed from the outside).
 
 Furthermore, without any extra configurations, the communication inside our virtual network is too free and undirected. This means traffic is able to go to subnets or apps we may not want them to. 
 
@@ -304,7 +306,11 @@ This is what an IP table is for. We can set rules for what to do with different 
 
 * #### Loopback interface
 
-the loopback interface: Think of it like an internal communication system within your computer. When programs on your computer need to talk to each other, they use this loopback interface instead of going out to your network card and back. It's like sending a letter to your next-door neighbor instead of mailing it across the country and back. This internal communication is very fast and efficient because it doesn't involve sending data out of your computer and waiting for it to come back.
+The loopback interface: Think of it like an internal communication system within your computer. When programs in your computer need to talk to each other, they use this loopback interface instead of going out to your network card and back. 
+
+It's like giving a letter to your next-door neighbor instead of mailing it across the country and back. This internal communication is very fast and efficient because it doesn't involve sending data out of your computer and waiting for it to come back.
+
+In essence the loopback interface allows the computer to talk to itself. It is for communication within the machine and is how you can see the local host when we put it in the web browser.
 
 * ### Example IP Table
 
@@ -317,27 +323,23 @@ echo "Configuring iptables..."
  
 
 # 1 Allow communication within the same computer: This command allows programs running on the computer to talk to each other.
-
 sudo iptables -A INPUT -i lo -j ACCEPT
 
 # 2 Allow internal communication to work: This command ensures that programs running on the computer can send information to each other.
-
 sudo iptables -A OUTPUT -o lo -j ACCEPT
 
 # 3 Allow responses to ongoing communication: This command allows the computer to receive information back from the internet or other computers that it requested.
-
 sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
  
 # 4 Allow responses to leave the computer: This command ensures that when the computer requests information from the internet or other computers, it can receive it.
-
 sudo iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
  
 # 5 Block anything that doesn't make sense: This command makes sure that any strange or potentially harmful communication attempts are stopped before they can do any damage.
-
+# Specifically invalid packets 
 sudo iptables -A INPUT -m state --state INVALID -j DROP
  
-# 6 These commands allow incoming and outgoing SSH (Secure Shell) traffic, respectively, ensuring that new SSH connections are accepted and established SSH connections are allowed to send data out. Enabling the computer to be securely accessed from another computer over the internet.
-
+# 6 These commands allow incoming and outgoing SSH (Secure Shell) traffic, respectively, ensuring that new SSH connections are accepted and established SSH connections are allowed to send data out. 
+# Enabling the computer to be securely accessed from another computer over the internet.
 sudo iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
  
@@ -351,20 +353,20 @@ sudo iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 #sudo iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 #sudo iptables -A INPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
  
-# 7 Allow a specific type of data to pass through: This command lets a certain type of information to travel from one part of the network to another. It forwards TCP traffic from the subnet 10.0.2.0/24 to the subnet 10.0.4.0/24 on port 27017, typically used for MongoDB.
-
+# 7 Allow a specific type of data to pass through: This command lets a certain type of information to travel from one part of the network to another. 
+# It forwards TCP traffic from the subnet 10.0.2.0/24 to the subnet 10.0.4.0/24 on port 27017, typically used for MongoDB.
 sudo iptables -A FORWARD -p tcp -s 10.0.2.0/24 -d 10.0.4.0/24 --destination-port 27017 -m tcp -j ACCEPT
  
-# 8 Allow computers to talk to each other using pings: This command lets computers on one part of the network check if another computer is reachable and responsive. It is permitting forwarding ICMP (ping) traffic from the subnet 10.0.2.0/24 to the subnet 10.0.4.0/24, allowing new and established ICMP connections.
-
+# 8 Allow computers to talk to each other using pings: This command lets computers on one part of the network check if another computer is reachable and responsive. 
+# It is permitting forwarding ICMP (ping) traffic from the subnet 10.0.2.0/24 to the subnet 10.0.4.0/24, allowing new and established ICMP connections.
 sudo iptables -A FORWARD -p icmp -s 10.0.2.0/24 -d 10.0.4.0/24 -m state --state NEW,ESTABLISHED -j ACCEPT
  
-# 9 Block everything by default: This command ensures that unless a specific rule says otherwise, nothing can come into the computer from the outside. It sets the default policy for incoming traffic to drop, meaning that unless explicitly allowed by preceding rules, incoming traffic will be blocked.
-
+# 9 Block everything by default: This command ensures that unless a specific rule says otherwise, nothing can come into the computer from the outside. 
+# It sets the default policy for incoming traffic to drop, meaning that unless explicitly allowed by preceding rules, incoming traffic will be blocked.
 sudo iptables -P INPUT DROP
  
-# 10 Block everything from going through the computer: This command ensures that unless a specific rule says otherwise, the computer won't help send information from one place to another (within the virtual network). It sets the default policy for forwarding traffic to drop, so unless explicitly allowed by preceding rules, forwarding of traffic between interfaces will be blocked.
-
+# 10 Block everything from going through the computer: This command ensures that unless a specific rule says otherwise, the computer won't help send information from one place to another (within the virtual network). 
+# It sets the default policy for forwarding traffic to drop, so unless explicitly allowed by preceding rules, forwarding of traffic between interfaces will be blocked.
 sudo iptables -P FORWARD DROP
  
 echo "Done!"
